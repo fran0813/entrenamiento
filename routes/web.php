@@ -24,16 +24,19 @@ Route::group(['prefix' => 'admin'], function()
 	Route::get('/', 'AdminController@index')->middleware('auth');
 	Route::get('/categoria', 'AdminController@categoria')->middleware('auth');
 	Route::get('/asignarCategoria', 'AdminController@asignarCategoria')->middleware('auth');
+	Route::get('/calificarCategoria', 'AdminController@calificarCategoria')->middleware('auth');
 
 	Route::get('/mostrarTablaCategoria', 'AdminController@mostrarTablaCategoria');
 	Route::get('/mostrarActualizarCategoria', 'AdminController@mostrarActualizarCategoria');
 	Route::get('/mostrarTablaUsuarios', 'AdminController@mostrarTablaUsuarios');
+	Route::get('/mostrarTablaUsuariosCalificar', 'AdminController@mostrarTablaUsuariosCalificar');
 
 	Route::post('/crearCategoria', 'AdminController@crearCategoria');
 	Route::post('/actualizarCategoria', 'AdminController@actualizarCategoria');
 	Route::post('/eliminarCategoria', 'AdminController@eliminarCategoria');
 	Route::post('/asignarUsuario', 'AdminController@asignarUsuario');
 	Route::post('/desasignarUsuario', 'AdminController@desasignarUsuario');
+	Route::post('/calificar', 'AdminController@calificar');
 
 	Route::post('/idCategoria', 'AdminController@idCategoria');
 });

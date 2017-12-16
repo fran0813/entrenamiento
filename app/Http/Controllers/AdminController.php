@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use \Response;
 use App\Category;
-use App\User;
+use App\Note;
 use App\Qualification;
+use App\User;
 
 class AdminController extends Controller
 {
@@ -27,11 +28,17 @@ class AdminController extends Controller
         return view('admin.asignarCategoria');
     }
 
+    public function calificarCategoria()
+    {
+        return view('admin.calificarCategoria');
+    }
+
     public function idCategoria(Request $request)
     {
         $id = $_POST['id'];
-        $request->session()->put("idCategoria",$id);
-        return Response::json(array('html' => "ok"));
+        $request->session()->put('idCategoria',$id);
+
+        return Response::json(array('html' => 'ok'));
     }
 
     public function crearCategoria(Request $request)
@@ -87,11 +94,11 @@ class AdminController extends Controller
     		$html .= "<tr class='border-dotted'>";
     		$html .= "<td class='text-center'>$cont</td>";
     		$html .= "<td class='text-center'>$name</td>";
-    		$html .= "<td class='text-center'>";
+    		$html .= "<td class='text-center' style='width: 50%;'>";
     		$html .= "<a id='$id' href='#' class='btn btn-info' value='actualizar' data-toggle='modal' data-target='#modalActualizarCategoria' style='margin-right: 1%;'>Editar</a>";
     		$html .= "<a id='$id' href='#' class='btn btn-danger' value='eliminar' data-toggle='modal' data-target='#modalEliminarCategoria' style='margin-right: 1%;'>Eliminar</a>";
             $html .= "<a id='$id' href='#' class='btn btn-primary' value='asignar' style='margin-right: 1%;'>Asignar usuarios</a>";
-             $html .= "<a id='$id' href='#' class='btn btn-warning' value='asignar' style='margin-right: 1%;'>Ver usuarios asignados</a>";
+             $html .= "<a id='$id' href='#' class='btn btn-warning' value='calificar' style='margin-right: 1%;'>Calificar usuarios</a>";
     		$html .= "</td>";
     		$html .= "</tr>";
     	}
@@ -99,7 +106,7 @@ class AdminController extends Controller
     	$html .= "</tbody>
                 </table>";
 
-        if($booleanCategoria == False){
+        if ($booleanCategoria == False) {
             $html = "<h1 class='text-center'>No hay categorías que mostrar</h1>";
         }
 
@@ -108,7 +115,6 @@ class AdminController extends Controller
 
     public function mostrarActualizarCategoria(Request $request)
     {
-    	$html = "";
     	$id = $_GET['id'];
 
     	$categorias = Category::where('id', $id)
@@ -165,7 +171,7 @@ class AdminController extends Controller
         $booleanQualification = False;
         $idCategoria = null;
 
-        if($request->session()->get("idCategoria")){
+        if ($request->session()->get("idCategoria")) {
             $idCategoria = $request->session()->get("idCategoria");
         }
 
@@ -174,7 +180,7 @@ class AdminController extends Controller
                 <tr>";
 
         $html .= "<th class='text-center'>Numero</th>";
-        $html .= "<th class='text-center'>Título</th>";
+        $html .= "<th class='text-center'>Usuario</th>";
         $html .= "<th class='text-center'>Funciones</th>";
 
         $html .= "</tr>
@@ -201,22 +207,21 @@ class AdminController extends Controller
                 $idQualification = $qualification->id;
             }
 
-            if ($booleanQualification == False){
-                 $html .= "<tr class='border-dotted'>";
+            if ($booleanQualification == False) {
+                $html .= "<tr class='border-dotted'>";
                 $html .= "<td class='text-center'>$cont</td>";
                 $html .= "<td class='text-center'>$name</td>";
                 $html .= "<td class='text-center'>";
-                $html .= "<a id='$id' href='#' class='btn btn-info' value='asignar' style='margin-right: 1%;'>Asignar</a>";
-                $html .= "<a id='$id' href='#' class='btn btn-danger' value='desasignar' style='margin-right: 1%;'>Desasignar</a>";
+                $html .= "<a id='$id' href='#' class='btn btn-info' value='asignar'>Asignar</a>";
                 $html .= "</td>";
                 $html .= "</tr>";
             } else {
-                $html .= "<tr class='border-dotted' style='background-color: #4686B7;'>";
+                $html .= "<tr class='border-dotted' style='background-color: #87C4F8;'>";
                 $html .= "<td class='text-center'>$cont</td>";
                 $html .= "<td class='text-center'>$name</td>";
-                $html .= "<td class='text-center'>";
+                $html .= "<td class='text-center' style='width: 40%;'>";
                 $html .= "<a id='$id' href='#' class='btn btn-info' value='asignar' style='margin-right: 1%;'>Asignar</a>";
-                $html .= "<a id='$id' href='#' class='btn btn-danger' value='desasignar' style='margin-right: 1%;'>Desasignar</a>";
+                $html .= "<a id='$id' href='#' class='btn btn-danger' data-toggle='modal' data-target='#modalDesasignarCategoria' value='desasignar' style='margin-right: 1%;'>Desasignar</a>";
                 $html .= "</td>";
                 $html .= "</tr>";
             }
@@ -225,7 +230,7 @@ class AdminController extends Controller
         $html .= "</tbody>
                 </table>";
 
-        if($booleanUser == False){
+        if ($booleanUser == False) {
             $html = "<h1 class='text-center'>No hay usuarios que mostrar</h1>";
         }
 
@@ -235,11 +240,11 @@ class AdminController extends Controller
     public function asignarUsuario(Request $request)
     {
         $html = "";
-        $id = $_POST['id'];
         $booleanQualification = False;
         $idCategoria = null;
+        $id = $_POST['id'];
 
-        if($request->session()->get("idCategoria")){
+        if ($request->session()->get("idCategoria")) {
             $idCategoria = $request->session()->get("idCategoria");
         }
 
@@ -268,10 +273,10 @@ class AdminController extends Controller
     {
         $html = "";
         $booleanQualification = False;
-        $id = $_POST['id'];
         $idCategoria = null;
+        $id = $_POST['id'];
 
-        if($request->session()->get("idCategoria")){
+        if ($request->session()->get("idCategoria")) {
             $idCategoria = $request->session()->get("idCategoria");
         }
 
@@ -283,12 +288,114 @@ class AdminController extends Controller
             $idQualification = $qualification->id;
         }
 
-        if ($booleanQualification == True){
+        if ($booleanQualification == True) {
             $delete_qualification = Qualification::find($idQualification);
             $delete_qualification->delete();
             $html = "Se ha desasigno con éxito";
         }
         
         return Response::json(array('html' => $html,));  
+    }
+
+    public function mostrarTablaUsuariosCalificar(Request $request)
+    {
+        $html = "";
+        $cont = 0;
+        $booleanUser = False;
+        $booleanQualification = False;
+        $idCategoria = null;
+
+        if ($request->session()->get("idCategoria")) {
+            $idCategoria = $request->session()->get("idCategoria");
+        }
+
+        $html .= "<table class='table table-bordered'>
+                <thead class='thead-s'>
+                <tr>";
+
+        $html .= "<th class='text-center'>Numero</th>";
+        $html .= "<th class='text-center'>Usuario</th>";
+        $html .= "<th class='text-center'>Calificación</th>";
+
+        $html .= "</tr>
+                </thead>
+                <tbody>";
+
+        $users = User::join('qualifications', 'qualifications.user_id', 'users.id')
+                    ->join('categories', 'qualifications.category_id', 'categories.id')
+                    ->select('users.id', 'users.name')
+                    ->orderBy('users.id', 'asc')
+                    ->get();
+        foreach ($users as $user) {
+            $booleanUser = True;
+            $cont++;
+            $id = $user->id;
+            $name = $user->name;
+
+            $qualifications = Qualification::where('user_id', $id)
+                                        ->where('category_id', $idCategoria)
+                                        ->get();
+            foreach ($qualifications as $qualification) {
+                $booleanQualification = True;
+                $idQualification = $qualification->id;
+                $noteUser = $qualification->note;
+            }
+
+            $html .= "<tr class='border-dotted'>";
+            $html .= "<td class='text-center'>$cont</td>";
+            $html .= "<td class='text-center'>$name</td>";
+            $html .= "<td class='text-center' style='width: 40%;'>";
+            $html .= "<select id='$id' class='form-control' onchange='calificar(this);'>";
+            $html .= "<option value='$id'>Seleccione la calificación</option>";
+
+            $notes = Note::all();
+            foreach ($notes as $note) {
+                $nameNote = $note->name;
+
+                if ($noteUser == $nameNote) {
+                    $html .= "<option id='$id' value='$nameNote' selected>$nameNote</option>";
+                } else {
+                    $html .= "<option id='$id' value='$nameNote'>$nameNote</option>";
+                }                
+            }
+
+            $html .= "</select>";
+            $html .= "</td>";
+            $html .= "</tr>";
+        }
+
+        $html .= "</tbody>
+                </table>";
+
+        if ($booleanUser == False) {
+            $html = "<h1 class='text-center'>No hay usuarios que mostrar</h1>";
+        }
+
+        return Response::json(array('html' => $html,));
+    }
+
+    public function calificar(Request $request)
+    {
+        $idCategoria = null;
+        $id = $_POST['id'];
+        $value = $_POST['value'];
+
+        if ($request->session()->get("idCategoria")) {
+            $idCategoria = $request->session()->get("idCategoria");
+        }
+
+        $qualifications = Qualification::where('user_id', $id)
+                                            ->where('category_id', $idCategoria)
+                                            ->get();
+        foreach ($qualifications as $qualification) {
+            $booleanQualification = True;
+            $idQualification = $qualification->id;
+        }
+
+        $qualification = Qualification::find($idQualification);
+        $qualification->note = $value;
+        $qualification->save();
+
+        return Response::json(array('html' => 'ok',));     
     }
 }

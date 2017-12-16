@@ -10,17 +10,6 @@
         </li>
     </ul>
 </li>
-<li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-        Calificación <span class="caret"></span>
-    </a>
-
-    <ul class="dropdown-menu">
-        <li class="text-left">
-            <a href="{{ url('/admin/categoria') }}">Calificar usuarios</a>
-        </li>
-    </ul>
-</li>
 @endsection
 
 @section('authentication')

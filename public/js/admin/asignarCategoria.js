@@ -1,9 +1,9 @@
 $(document).ready(function()
 {
-	mostrarTablaCategoria();
+	mostrarTablaUsuarios();
 });
 
-function mostrarTablaCategoria()
+function mostrarTablaUsuarios()
 {
 	$.ajax({
 		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -33,21 +33,37 @@ $("#mostrarTablaUsuarios").on("click", "a", function(){
 		})
 
 		.done(function(response) {
-			mostrarTablaCategoria();
+			mostrarTablaUsuarios();
 			$('#respuestaUsuario').html(response.html);
 		});
 	} else if (value == "desasignar"){
-		$.ajax({
-			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-			method: "POST",
-			url: "/admin/desasignarUsuario",
-			dataType: 'json',
-			data: { id: id }
-		})
-
-		.done(function(response) {
-			mostrarTablaCategoria();
-			$('#respuestaUsuario').html(response.html);
-		});
+		$('#idDesasignarCategoria').val(id);
 	}
+});
+
+$("#formDesasignarCategoria").on("submit", function()
+{
+	var id = $("#idDesasignarCategoria").val();
+
+	$.ajax({
+		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+		method: "POST",
+		url: "/admin/desasignarUsuario",
+		dataType: 'json',
+		data: { id: id }
+	})
+
+	.done(function(response) {
+		mostrarTablaUsuarios();
+		$('#respuestaUsuario').html(response.html);
+	});
+
+	return false;
+});
+
+$(document).bind('keydown',function(eEvento){
+    if(eEvento.which == 27) { 
+        var $jQuery = window.parent.$;
+        $jQuery('body').find('#modalDesasignarCategoria').trigger('click');
+    }
 });

@@ -69,6 +69,18 @@ $("#mostrarTablaCategoria").on("click", "a", function(){
 		.done(function(response) {
 			location.href = '/admin/asignarCategoria';
 		});
+	} else if (value == "calificar") {
+		$.ajax({
+			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+			method: "POST",
+			url: "/admin/idCategoria",
+			dataType: 'json',
+			data: { id: id }
+		})
+
+		.done(function(response) {
+			location.href = '/admin/calificarCategoria';
+		});
 	}
 });
 
@@ -90,6 +102,7 @@ $("#formEditarCategoria").on("submit", function()
 		mostrarTablaCategoria();
 		$('#respuestaActualizarCategoria').html(response.html);
 	});
+	
 	return false;
 });
 
@@ -109,6 +122,7 @@ $("#formEliminarCategoria").on("submit", function()
 		mostrarTablaCategoria();
 		$('#repuestaEliminarCategoria').html(response.html);
 	});
+
 	return false;
 });
 

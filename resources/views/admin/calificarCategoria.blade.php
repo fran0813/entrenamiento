@@ -7,19 +7,16 @@
     @section('content')
     <div class="container">
         <div class="row">
-            <p class="text-center" id="respuestaUsuario"></p>
             <div class="col-md-12 col-ls-12 col-sm-12">
-                <div id="mostrarTablaUsuarios" class="col-md-12 col-ls-12 col-sm-12"></div>
+                <div id="mostrarTablaUsuariosCalificar" class="col-md-12 col-ls-12 col-sm-12"></div>
              </div>
         </div>
     </div>
     @endsection
 
     @section('javascript')
-        <script src="{{ asset('js/admin/asignarCategoria.js') }}"></script>
+        <script src="{{ asset('js/admin/calificarCategoria.js') }}"></script>
     @endsection
-
-    @include('admin.modal.desasignarCategoria')
     
 @else
     <div class="col-md-12 col-ls-12 col-sm-12 text-center">
