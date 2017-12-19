@@ -36,7 +36,7 @@ class AdminController extends Controller
     public function idCategoria(Request $request)
     {
         $id = $_POST['id'];
-        $request->session()->put('idCategoria',$id);
+        $request->session()->put('idCategory', $id);
 
         return Response::json(array('html' => 'ok'));
     }
@@ -44,16 +44,16 @@ class AdminController extends Controller
     public function crearCategoria(Request $request)
     {
     	$html = "";
-    	$booleanCategoria = False;
+    	$booleanCategory = False;
     	$name = $_POST['name'];
 
-    	$categorias = Category::where('name', $name)
+    	$categories = Category::where('name', $name)
     						->get();
-    	foreach ($categorias as $categoria) {
-    		$booleanCategoria = True;
+    	foreach ($categories as $category) {
+    		$booleanCategory = True;
     	}
 
-    	if ($booleanCategoria == False) {
+    	if ($booleanCategory == False) {
     		$create_category = new Category;
     		$create_category->name = $name;
     		$create_category->user_id = Auth::user()->id;
@@ -70,8 +70,7 @@ class AdminController extends Controller
     {
     	$html = "";
     	$cont = 0;
-        $booleanCategoria = False;
-    	$categorias = Category::all();
+        $booleanCategory = False;    	
 
     	$html .= "<table class='table table-bordered'>
                 <thead class='thead-s'>
@@ -85,11 +84,12 @@ class AdminController extends Controller
                 </thead>
                 <tbody>";
 
-    	foreach ($categorias as $categoria) {
-            $booleanCategoria = True;
-    		$cont++;
-    		$id = $categoria->id;
-    		$name = $categoria->name;
+        $categories = Category::all();
+    	foreach ($categories as $category) {
+            $cont++;
+            $booleanCategory = True;
+    		$id = $category->id;
+    		$name = $category->name;
 
     		$html .= "<tr class='border-dotted'>";
     		$html .= "<td class='text-center'>$cont</td>";
@@ -106,7 +106,7 @@ class AdminController extends Controller
     	$html .= "</tbody>
                 </table>";
 
-        if ($booleanCategoria == False) {
+        if ($booleanCategory == False) {
             $html = "<h1 class='text-center'>No hay categorías que mostrar</h1>";
         }
 
@@ -117,10 +117,10 @@ class AdminController extends Controller
     {
     	$id = $_GET['id'];
 
-    	$categorias = Category::where('id', $id)
+    	$categories = Category::where('id', $id)
     						->get();
-    	foreach ($categorias as $categoria) {
-    		$name = $categoria->name;
+    	foreach ($categories as $category) {
+    		$name = $category->name;
     	}
 
     	return Response::json(array('name' => $name,));    	
@@ -129,17 +129,17 @@ class AdminController extends Controller
     public function actualizarCategoria(Request $request)
     {
     	$html = "";
-    	$booleanCategoria = False;
+    	$booleanCategory = False;
     	$id = $_POST['id'];
     	$name = $_POST['name'];
 
-    	$categorias = Category::where('name', $name)
+    	$categories = Category::where('name', $name)
     						->get();
-    	foreach ($categorias as $categoria) {
-    		$booleanCategoria = True;
+    	foreach ($categories as $category) {
+    		$booleanCategory = True;
     	}
 
-    	if ($booleanCategoria == False) {
+    	if ($booleanCategory == False) {
     		$update_category = Category::find($id);
             $update_category->name = $name;
             $update_category->save();
@@ -169,10 +169,10 @@ class AdminController extends Controller
         $cont = 0;
         $booleanUser = False;
         $booleanQualification = False;
-        $idCategoria = null;
+        $idCategory = null;
 
-        if ($request->session()->get("idCategoria")) {
-            $idCategoria = $request->session()->get("idCategoria");
+        if ($request->session()->get("idCategory")) {
+            $idCategory = $request->session()->get("idCategory");
         }
 
         $html .= "<table class='table table-bordered'>
@@ -194,13 +194,13 @@ class AdminController extends Controller
                     ->orderBy('users.id', 'asc')
                     ->get();
         foreach ($users as $user) {
-            $booleanUser = True;
             $cont++;
+            $booleanUser = True;
             $id = $user->id;
             $name = $user->name;
 
             $qualifications = Qualification::where('user_id', $id)
-                                        ->where('category_id', $idCategoria)
+                                        ->where('category_id', $idCategory)
                                         ->get();
             foreach ($qualifications as $qualification) {
                 $booleanQualification = True;
@@ -241,15 +241,15 @@ class AdminController extends Controller
     {
         $html = "";
         $booleanQualification = False;
-        $idCategoria = null;
+        $idCategory = null;
         $id = $_POST['id'];
 
-        if ($request->session()->get("idCategoria")) {
-            $idCategoria = $request->session()->get("idCategoria");
+        if ($request->session()->get("idCategory")) {
+            $idCategory = $request->session()->get("idCategory");
         }
 
         $qualifications = Qualification::where('user_id', $id)
-                                        ->where('category_id', $idCategoria)
+                                        ->where('category_id', $idCategory)
                                         ->get();
         foreach ($qualifications as $qualification) {
             $booleanQualification = True;
@@ -259,7 +259,7 @@ class AdminController extends Controller
             $create_user_category = new Qualification;
             $create_user_category->note = null;
             $create_user_category->user_id = $id;
-            $create_user_category->category_id = $idCategoria;
+            $create_user_category->category_id = $idCategory;
             $create_user_category->save();
             $html = "Se ha asignado con éxito";
         } else {
@@ -273,15 +273,15 @@ class AdminController extends Controller
     {
         $html = "";
         $booleanQualification = False;
-        $idCategoria = null;
+        $idCategory = null;
         $id = $_POST['id'];
 
-        if ($request->session()->get("idCategoria")) {
-            $idCategoria = $request->session()->get("idCategoria");
+        if ($request->session()->get("idCategory")) {
+            $idCategory = $request->session()->get("idCategory");
         }
 
         $qualifications = Qualification::where('user_id', $id)
-                                            ->where('category_id', $idCategoria)
+                                            ->where('category_id', $idCategory)
                                             ->get();
         foreach ($qualifications as $qualification) {
             $booleanQualification = True;
@@ -303,10 +303,16 @@ class AdminController extends Controller
         $cont = 0;
         $booleanUser = False;
         $booleanQualification = False;
-        $idCategoria = null;
+        $idCategory = null;
 
-        if ($request->session()->get("idCategoria")) {
-            $idCategoria = $request->session()->get("idCategoria");
+        if ($request->session()->get("idCategory")) {
+            $idCategory = $request->session()->get("idCategory");
+        }
+
+        $categories = Category::where('id', $idCategory)
+                                ->get();
+        foreach ($categories as $category) {
+            $nameCategory = $category->name;
         }
 
         $html .= "<table class='table table-bordered'>
@@ -324,16 +330,17 @@ class AdminController extends Controller
         $users = User::join('qualifications', 'qualifications.user_id', 'users.id')
                     ->join('categories', 'qualifications.category_id', 'categories.id')
                     ->select('users.id', 'users.name')
+                    ->where('qualifications.category_id', $idCategory)
                     ->orderBy('users.id', 'asc')
                     ->get();
         foreach ($users as $user) {
-            $booleanUser = True;
             $cont++;
+            $booleanUser = True;
             $id = $user->id;
             $name = $user->name;
 
             $qualifications = Qualification::where('user_id', $id)
-                                        ->where('category_id', $idCategoria)
+                                        ->where('category_id', $idCategory)
                                         ->get();
             foreach ($qualifications as $qualification) {
                 $booleanQualification = True;
@@ -371,21 +378,21 @@ class AdminController extends Controller
             $html = "<h1 class='text-center'>No hay usuarios que mostrar</h1>";
         }
 
-        return Response::json(array('html' => $html,));
+        return Response::json(array('html' => $html, 'titulo' => $nameCategory));
     }
 
     public function calificar(Request $request)
     {
-        $idCategoria = null;
+        $idCategory = null;
         $id = $_POST['id'];
         $value = $_POST['value'];
 
-        if ($request->session()->get("idCategoria")) {
-            $idCategoria = $request->session()->get("idCategoria");
+        if ($request->session()->get("idCategory")) {
+            $idCategory = $request->session()->get("idCategory");
         }
 
         $qualifications = Qualification::where('user_id', $id)
-                                            ->where('category_id', $idCategoria)
+                                            ->where('category_id', $idCategory)
                                             ->get();
         foreach ($qualifications as $qualification) {
             $booleanQualification = True;

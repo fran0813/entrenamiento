@@ -14,6 +14,7 @@ function mostrarTablaUsuariosCalificar()
 	})
 
 	.done(function(response){
+		$('#titulo').html(response.titulo);
 		$('#mostrarTablaUsuariosCalificar').html(response.html);
 	});
 }

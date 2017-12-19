@@ -7,12 +7,13 @@
     @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-12 col-ls-12 col-sm-12"></div>
-
-            @include('layouts.section.status')
-          
+            <div id="mostrarTablaCalificacion" class="col-md-12 col-ls-12 col-sm-12"></div>
         </div>
     </div>
+    @endsection
+
+    @section('javascript')
+        <script src="{{ asset('js/user/calificacion.js') }}"></script>
     @endsection
 
 @else
