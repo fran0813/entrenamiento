@@ -41,7 +41,7 @@ Route::group(['prefix' => 'admin'], function()
 	Route::post('/idCategoria', 'AdminController@idCategoria');
 });
 
-Route::group(['prefix' => '/user'], function()
+Route::group(['prefix' => 'user'], function()
 {
 	Route::get('/', 'UserController@index')->middleware('auth');
 	Route::get('/calificacion', 'UserController@calificacion')->middleware('auth');

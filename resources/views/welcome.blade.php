@@ -90,8 +90,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>       
 
         <!-- jQuery -->
         <script src="{{ asset('jquery/jquery.min.js') }}"></script>
